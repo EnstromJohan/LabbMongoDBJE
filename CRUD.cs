@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Microsoft.VisualBasic;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,9 @@ namespace LabbMongoDBJE
     {
         private readonly IMongoCollection<ProductODM> products;
 
-        public CRUD(MongoDAO dao)
+        public CRUD(MongoDAO dao, string collectionName )
         {
-            products = (IMongoCollection<ProductODM>?)dao.GetCollection<MongoDAO>("products");
+            products = (IMongoCollection<ProductODM>?)dao.GetCollection<MongoDAO>(collectionName);
         }
 
         public void Create(ProductODM product)
@@ -27,6 +28,11 @@ namespace LabbMongoDBJE
             var filter = Builders<ProductODM>.Filter.Eq("Id", id);
             return products.Find(filter).FirstOrDefault();
             //return this.collection.Find(new BsonDocument()).ToList();
+        }
+
+        public List<ProductODM> ReadAll()
+        {
+            return products.Find(new BsonDocument()).ToList();
         }
 
         public void Update(ProductODM product)
